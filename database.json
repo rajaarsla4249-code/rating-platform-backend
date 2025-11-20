@@ -1,0 +1,18 @@
+{
+  "admin": {
+    "username": "admin",
+    "password": "admin123",
+    "token": "f2f1953caf2b9d5463a30cc5b44fc2e9fd56247509f17e94"
+  },
+  "users": {
+    "User123": {
+      "totalEarned": 0,
+      "ratingsDone": 0,
+      "history": [],
+      "pendingWithdraw": 0,
+      "bankDetails": {},
+      "balance": 9000,
+      "canRate": true
+    }
+  }
+}

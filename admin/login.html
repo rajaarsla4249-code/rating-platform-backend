@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <style>
+        body { font-family: Arial; background:#f0f0f0; display:flex; justify-content:center; align-items:center; height:100vh; }
+        .box { background:#fff; padding:30px; border-radius:10px; width:300px; box-shadow:0 0 10px rgba(0,0,0,0.2); }
+        input { width:100%; padding:10px; margin-top:10px; border-radius:5px; border:1px solid #ccc; }
+        button { width:100%; padding:10px; margin-top:15px; background:#007bff; color:#fff; border:none; border-radius:5px; cursor:pointer; }
+        button:hover { background:#0056c1; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Admin Login</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="msg" style="color:red;"></p>
+</div>
+
+<script>
+function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    fetch("/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            localStorage.setItem("adminToken", data.token);
+            window.location.href = "/admin/index.html"; // redirect to dashboard
+        } else {
+            document.getElementById("msg").innerText = data.message;
+        }
+    })
+    .catch(err => alert("Error: " + err));
+}
+</script>
+
+</body>
+</html>

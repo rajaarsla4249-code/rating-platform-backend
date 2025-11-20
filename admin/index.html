@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Admin</h2>
+    <a class="active">Dashboard</a>
+    <a>User Management</a>
+    <a>Settings</a>
+</div>
+
+<div class="content">
+    <h1>Admin Dashboard</h1>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Users</h3>
+            <p id="totalUsers">0</p>
+        </div>
+        <div class="card">
+            <h3>Total Ratings</h3>
+            <p id="totalRatings">0</p>
+        </div>
+        <div class="card">
+            <h3>Total Earnings</h3>
+            <p id="totalEarnings">₹0</p>
+        </div>
+        <div class="card">
+            <h3>Total Tasks</h3>
+            <p id="totalTasks">0</p>
+        </div>
+    </div>
+
+    <h2>User Table</h2>
+    <input type="text" id="searchBox" class="search" placeholder="Search user...">
+
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Balance</th>
+                <th>Ratings</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Controls</h2>
+    <div class="controls">
+        <div>
+            <label>Rating Enabled</label>
+            <label class="switch">
+                <input type="checkbox" id="ratingToggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div>
+            <label>Withdraw Enabled</label>
+            <label class="switch">
+                <input type="checkbox" id="withdrawToggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <button id="resetBtn" class="danger-btn">Reset Ratings</button>
+    </div>
+</div>
+
+<!-- Pop-up Modal for Add/Cut Amount -->
+<div id="amountModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Manage User Amount</h2>
+        <p id="selectedUser"></p>
+        <input id="amountInput" type="number" placeholder="Enter amount">
+        <button id="addBtn">Add Amount</button>
+        <button id="cutBtn" class="danger-btn">Cut Amount</button>
+        <p id="msgAmount"></p>
+    </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
