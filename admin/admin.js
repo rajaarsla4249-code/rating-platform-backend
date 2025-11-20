@@ -1,23 +1,23 @@
-document.addEventListener("DOMContentLoaded", () => {
-    loadStats();
-    loadUsers();
-    loadSettings();
-});
+const BASE_URL = "https://rating-platform-backend.onrender.com";
 
-// Fetch stats
+/* ==========================
+    Load Dashboard Stats
+========================== */
 async function loadStats() {
-    const res = await fetch("/admin/stats");
+    const res = await fetch(`${BASE_URL}/admin/stats`);
     const data = await res.json();
 
-    totalUsers.innerText = data.totalUsers;
-    totalRatings.innerText = data.totalRatings;
-    totalTasks.innerText = data.totalTasks;
-    totalEarnings.innerText = "₹" + data.totalEarnings;
+    document.getElementById("totalUsers").innerText = data.totalUsers;
+    document.getElementById("totalRatings").innerText = data.totalRatings;
+    document.getElementById("totalTasks").innerText = data.totalTasks;
+    document.getElementById("totalEarnings").innerText = "₹" + data.totalEarnings;
 }
 
-// Load users in table
+/* ==========================
+    Load All Users
+========================== */
 async function loadUsers() {
-    const res = await fetch("/admin/users");
+    const res = await fetch(`${BASE_URL}/admin/users`);
     const users = await res.json();
 
     const body = document.querySelector("#userTable tbody");
@@ -28,64 +28,88 @@ async function loadUsers() {
         <tr>
             <td>${id}</td>
             <td>₹${user.balance}</td>
-            <td>${user.ratingCount}</td>
+            <td>${user.ratingsDone}</td>
             <td><button onclick="openAmountModal('${id}')">Manage</button></td>
         </tr>`;
         body.insertAdjacentHTML("beforeend", row);
     });
 }
 
-// Search filter
-searchBox.addEventListener("keyup", () => {
+/* ==========================
+    Search User
+========================== */
+document.getElementById("searchBox").addEventListener("keyup", () => {
     const term = searchBox.value.toLowerCase();
     document.querySelectorAll("#userTable tbody tr").forEach(row => {
         row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
     });
 });
 
-/********* Modal Controls ********/
+/* ==========================
+    Modal for Add / Cut Amount
+========================== */
 function openAmountModal(userId) {
-    selectedUser.innerText = "User ID: " + userId;
-    amountModal.style.display = "flex";
+    document.getElementById("selectedUser").innerText = "User: " + userId;
+    document.getElementById("amountModal").style.display = "flex";
 
-    addBtn.onclick = () => updateAmount(userId, "add");
-    cutBtn.onclick = () => updateAmount(userId, "cut");
+    document.getElementById("addBtn").onclick = () => updateAmount(userId, "add");
+    document.getElementById("cutBtn").onclick = () => updateAmount(userId, "cut");
 }
 
-closeModal.onclick = () => amountModal.style.display = "none";
+document.getElementById("closeModal").onclick = () => {
+    document.getElementById("amountModal").style.display = "none";
+};
 
 async function updateAmount(userId, type) {
-    const value = Number(amountInput.value);
-    if (!value) return;
+    const value = Number(document.getElementById("amountInput").value);
+    if (!value) return alert("Enter valid amount");
 
-    const url = type === "add" ? "/admin/addAmount" : "/admin/cutAmount";
+    const url = type === "add"
+        ? `${BASE_URL}/admin/addAmount`
+        : `${BASE_URL}/admin/cutAmount`;
 
     const res = await fetch(url, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, amount: value })
     });
 
     const data = await res.json();
-    msgAmount.innerText = data.success ? "Success!" : data.message;
+    document.getElementById("msgAmount").innerText = data.success ? "Success!" : data.message;
 
     loadUsers();
     loadStats();
 }
 
-/*********** Settings Toggles ***********/
+/* ==========================
+    Settings Toggles
+========================== */
 async function loadSettings() {
-    const res = await fetch("/admin/settings");
+    const res = await fetch(`${BASE_URL}/admin/settings`);
     const s = await res.json();
 
-    ratingToggle.checked = s.ratingEnabled;
-    withdrawToggle.checked = s.withdrawEnabled;
+    document.getElementById("ratingToggle").checked = s.ratingEnabled;
+    document.getElementById("withdrawToggle").checked = s.withdrawEnabled;
 }
 
-ratingToggle.onchange = () => fetch("/admin/toggleRating", { method: "POST" });
-withdrawToggle.onchange = () => fetch("/admin/toggleWithdraw", { method: "POST" });
+document.getElementById("ratingToggle").onchange = () => {
+    fetch(`${BASE_URL}/admin/toggleRating`, { method: "POST" });
+};
 
-resetBtn.onclick = () => {
-    fetch("/admin/resetRatings", { method: "POST" });
+document.getElementById("withdrawToggle").onchange = () => {
+    fetch(`${BASE_URL}/admin/toggleWithdraw`, { method: "POST" });
+};
+
+document.getElementById("resetBtn").onclick = () => {
+    fetch(`${BASE_URL}/admin/resetRatings`, { method: "POST" });
     alert("Ratings reset!");
 };
+
+/* ==========================
+    INIT
+========================== */
+document.addEventListener("DOMContentLoaded", () => {
+    loadStats();
+    loadUsers();
+    loadSettings();
+});
