@@ -11,11 +11,27 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-// --------------------
-// Root Route (REQUIRED FOR RENDER)
-// --------------------
-app.get("/", (req, res) => {
-  res.send("Backend is running ✔ on Render");
+/* ================================
+   API ROUTES (IMPORTANT)
+================================= */
+
+// GET ratings
+app.get("/api/ratings", (req, res) => {
+  res.json({
+    success: true,
+    ratings: []
+  });
+});
+
+// POST new rating
+app.post("/api/ratings", (req, res) => {
+  const { rating, comment } = req.body;
+
+  res.json({
+    success: true,
+    message: "Rating submitted",
+    data: { rating, comment }
+  });
 });
 
 // --------------------
